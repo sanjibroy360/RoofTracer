@@ -31,8 +31,8 @@ yarn start
 ```
 
 ### Preview
-<img width="1680" alt="Screenshot 2024-05-29 at 5 27 20 PM" src="https://github.com/sanjibroy360/RoofTracer/assets/56890013/fc708767-d5e1-46c8-b8ae-50eea1a4cc86">
+<img width="1680" alt="Screenshot 2024-05-29 at 6 12 55 PM" src="https://github.com/sanjibroy360/RoofTracer/assets/56890013/de0f0f87-0f2f-49fd-89e9-0bf0ac7ca2e8">
 
 ### Exported Image
-![canvas](https://github.com/sanjibroy360/RoofTracer/assets/56890013/2cc41406-cc06-40f0-a635-1dffb4d5abb9)
+![canvas](https://github.com/sanjibroy360/RoofTracer/assets/56890013/5b87329f-5360-4a19-981c-0c96343eeb80)
 
