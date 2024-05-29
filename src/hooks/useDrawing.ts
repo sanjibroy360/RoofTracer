@@ -5,54 +5,42 @@ export interface LineProps {
   points: number[];
 }
 
-export interface DrawingHandlers {
-  handleMouseDown: (e: Konva.KonvaEventObject<MouseEvent> | any) => void;
-  handleMouseMove: (e: Konva.KonvaEventObject<MouseEvent> | any) => void;
-  handleMouseUp: () => void;
+export interface DotProps {
+  x: number;
+  y: number;
 }
 
-export const useDrawing = (): [LineProps[], DrawingHandlers] => {
+export interface DrawingHandlers {
+  handleMouseDown: (e: Konva.KonvaEventObject<MouseEvent> | any) => void;
+}
+
+export const useDrawing = (): [LineProps[], DotProps[], DrawingHandlers] => {
   const [lines, setLines] = useState<LineProps[]>([]);
-  const [isDrawing, setIsDrawing] = useState<boolean>(false);
+  const [dots, setDots] = useState<DotProps[]>([]);
+  const [prevDot, setPrevDot] = useState<DotProps | null>(null);
 
   const handleMouseDown = (e: Konva.KonvaEventObject<MouseEvent> | any) => {
-    setIsDrawing(true);
     const pos = e.target.getStage().getPointerPosition();
     if (pos) {
-      setLines([...lines, { points: [pos.x, pos.y] }]);
+      const newDot = { x: pos.x, y: pos.y };
+      const newDots = [...dots, newDot];
+
+      // Connect the new dot to the previous dot
+      if (prevDot) {
+        const newLine = {
+          points: [prevDot.x, prevDot.y, pos.x, pos.y],
+        };
+        setLines([...lines, newLine]);
+      }
+
+      setDots(newDots);
+      setPrevDot(newDot);
     }
-  };
-
-  const handleMouseMove = (e: Konva.KonvaEventObject<MouseEvent> | any) => {
-    if (!isDrawing) return;
-    const stage = e.target.getStage();
-    if (!stage) return;
-    const point = stage.getPointerPosition();
-    if (!point) return;
-    const lastLine = lines[lines.length - 1];
-    const [lastX, lastY] = lastLine.points.slice(-2);
-
-    // Only update the points if the mouse has moved significantly
-    if (Math.abs(point.x - lastX) > 1 || Math.abs(point.y - lastY) > 1) {
-      lastLine.points = lastLine.points.concat([
-        lastX,
-        lastY,
-        point.x,
-        point.y,
-      ]);
-      setLines([...lines.slice(0, -1), lastLine]);
-    }
-  };
-
-  const handleMouseUp = () => {
-    setIsDrawing(false);
   };
 
   const drawingHandlers: DrawingHandlers = {
     handleMouseDown,
-    handleMouseMove,
-    handleMouseUp,
   };
 
-  return [lines, drawingHandlers];
+  return [lines, dots, drawingHandlers];
 };
