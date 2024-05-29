@@ -59,11 +59,12 @@ const Canvas: React.FC = () => {
           </Layer>
         </Stage>
       </div>
-      <div className="flex items-center opacity-80 bg-gray-200 py-4 px-3 rounded text-slate-900">
-        <InformationCircleIcon className="block mr-2 w-6" />
+      <div className="flex items-start opacity-80 bg-gray-200 py-4 px-3 rounded text-slate-900">
+        <InformationCircleIcon className="block mr-2 w-6 pt-1"/>
         <p>
-          Draw lines around house roofs by clicking on the image. Click on one
-          edge, then click on another edge to draw a line between them.
+          Draw lines around house roofs by clicking on the image. Click to place
+          a dot on the first edge, then click on another edge to draw a line
+          between the dots. Repeat to continue drawing connected lines.
         </p>
       </div>
     </div>
