@@ -1,13 +1,12 @@
 import React from "react";
+import Canvas from "./components/Canvas";
 
 function App() {
   return (
-    <div>
-      <header>
-        <h1 className="text-3xl font-bold underline text-green-600">
-          Roof Tracer
-        </h1>
-      </header>
+    <div className="bg-gray-100 min-h-screen">
+      <div className="container mx-auto">
+        <Canvas />
+      </div>
     </div>
   );
 }
