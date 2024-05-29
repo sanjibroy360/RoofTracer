@@ -3,7 +3,6 @@ import { Stage, Layer, Line, Image } from "react-konva";
 import useImage from "use-image";
 import { useDrawing } from "../hooks/useDrawing";
 import roofsImage from "../assets/Images/roofs.webp";
-import pencil from "../assets/Images/pencil.png";
 import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 
 const Canvas: React.FC = () => {
