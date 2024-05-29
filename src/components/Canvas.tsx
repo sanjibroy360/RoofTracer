@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Stage, Layer, Line, Image } from "react-konva";
+import React, { useRef } from "react";
+import { Stage, Layer, Line, Circle, Image } from "react-konva";
 import useImage from "use-image";
 import { useDrawing } from "../hooks/useDrawing";
 import roofsImage from "../assets/Images/roofs.webp";
@@ -11,8 +11,8 @@ import {
 const Canvas: React.FC = () => {
   const stageRef = useRef<any>(null);
   const [image] = useImage(roofsImage);
-  const [lines, drawingHandlers] = useDrawing();
-  const { handleMouseDown, handleMouseMove, handleMouseUp } = drawingHandlers;
+  const [lines, dots, drawingHandlers] = useDrawing();
+  const { handleMouseDown } = drawingHandlers;
 
   const handleExportClick = () => {
     if (stageRef.current) {
@@ -42,8 +42,6 @@ const Canvas: React.FC = () => {
           width={window.innerWidth}
           height={window.innerHeight}
           onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
           ref={stageRef}
         >
           <Layer>
@@ -52,16 +50,11 @@ const Canvas: React.FC = () => {
               width={window.innerWidth}
               className="block mx-auto p-4"
             />
+            {dots.map((dot, i) => (
+              <Circle key={i} x={dot.x} y={dot.y} radius={10} fill="yellow" />
+            ))}
             {lines.map((line, i) => (
-              <Line
-                key={i}
-                points={line.points}
-                stroke="red"
-                strokeWidth={10}
-                tension={0}
-                lineCap="round"
-                lineJoin="round"
-              />
+              <Line key={i} points={line.points} stroke="red" strokeWidth={6} />
             ))}
           </Layer>
         </Stage>
@@ -69,8 +62,8 @@ const Canvas: React.FC = () => {
       <div className="flex items-center opacity-80 bg-gray-200 py-4 px-3 rounded text-slate-900">
         <InformationCircleIcon className="block mr-2 w-6" />
         <p>
-          Draw lines around house roofs by clicking and dragging on the
-          image.
+          Draw lines around house roofs by clicking on the image. Click on one
+          edge, then click on another edge to draw a line between them.
         </p>
       </div>
     </div>
