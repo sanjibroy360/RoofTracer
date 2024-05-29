@@ -1,75 +1,69 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Stage, Layer, Line, Image } from "react-konva";
 import useImage from "use-image";
+import { useDrawing } from "../hooks/useDrawing";
+import roofsImage from "../assets/Images/roofs.webp";
+import pencil from "../assets/Images/pencil.png";
+import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 
-interface CanvasProps {}
+const Canvas: React.FC = () => {
+  const stageRef = useRef<any>(null);
+  const [image] = useImage(roofsImage);
+  const [lines, drawingHandlers] = useDrawing();
+  const { handleMouseDown, handleMouseMove, handleMouseUp } = drawingHandlers;
 
-interface LineProps {
-  points: number[];
-}
-
-const Canvas: React.FC<CanvasProps> = () => {
-  const [lines, setLines] = useState<LineProps[]>([]);
-  const [isDrawing, setIsDrawing] = useState(false);
-  const [image] = useImage("/Images/roofs.webp");
-
-  const handleMouseDown = (e: any) => {
-    setIsDrawing(true);
-    const pos = e.target.getStage().getPointerPosition();
-    setLines([...lines, { points: [pos.x, pos.y] }]);
-  };
-
-  const handleMouseMove = (e: any) => {
-    if (!isDrawing) return;
-    const stage = e.target.getStage();
-    const point = stage.getPointerPosition();
-    const lastLine = lines[lines.length - 1];
-    const [lastX, lastY] = lastLine.points.slice(-2);
-
-    // Only update the points if the mouse has moved significantly
-    if (Math.abs(point.x - lastX) > 1 || Math.abs(point.y - lastY) > 1) {
-      lastLine.points = lastLine.points.concat([
-        lastX,
-        lastY,
-        point.x,
-        point.y,
-      ]);
-      setLines([...lines.slice(0, -1), lastLine]);
+  const handleExportClick = () => {
+    if (stageRef.current) {
+      const dataURL = stageRef.current.toDataURL({ mimeType: "image/png" });
+      const link = document.createElement("a");
+      link.href = dataURL;
+      link.download = "canvas.png";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
   };
 
-  const handleMouseUp = () => {
-    setIsDrawing(false);
-  };
-
   return (
-    <div>
-      <Stage
-        width={window.innerWidth}
-        height={window.innerHeight}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-      >
-        <Layer>
-          <Image
-            image={image}
-            width={window.innerWidth}
-            height={window.innerHeight}
-          />
-          {lines.map((line, i) => (
-            <Line
-              key={i}
-              points={line.points}
-              stroke="red"
-              strokeWidth={10}
-              tension={0}
-              lineCap="round"
-              lineJoin="round"
+    <div className="relative">
+      <div className="w-10/12 mx-auto flex justify-end pt-6">
+        <button
+          onClick={handleExportClick}
+          className="neumorphic-button bg-gray-200 hover:bg-gray-300 focus:bg-gray-300 active:bg-gray-400 border border-gray-300 rounded-md shadow-lg p-4 transition duration-300"
+        >
+          <ArrowDownTrayIcon className="inline w-6 h-6 mr-3" />
+          <span>Export as Image</span>
+        </button>
+      </div>
+      <div className="w-10/12 mx-auto overflow-hidden rounded my-6 h-80vh bg-gray-100 shadow-neumorphic">
+        <Stage
+          width={window.innerWidth}
+          height={window.innerHeight}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          ref={stageRef}
+        >
+          <Layer>
+            <Image
+              image={image}
+              width={window.innerWidth}
+              className="block mx-auto p-4"
             />
-          ))}
-        </Layer>
-      </Stage>
+            {lines.map((line, i) => (
+              <Line
+                key={i}
+                points={line.points}
+                stroke="red"
+                strokeWidth={10}
+                tension={0}
+                lineCap="round"
+                lineJoin="round"
+              />
+            ))}
+          </Layer>
+        </Stage>
+      </div>
     </div>
   );
 };
