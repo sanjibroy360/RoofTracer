@@ -3,7 +3,10 @@ import { Stage, Layer, Line, Image } from "react-konva";
 import useImage from "use-image";
 import { useDrawing } from "../hooks/useDrawing";
 import roofsImage from "../assets/Images/roofs.webp";
-import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowDownTrayIcon,
+  InformationCircleIcon,
+} from "@heroicons/react/24/outline";
 
 const Canvas: React.FC = () => {
   const stageRef = useRef<any>(null);
@@ -24,8 +27,8 @@ const Canvas: React.FC = () => {
   };
 
   return (
-    <div className="relative">
-      <div className="w-10/12 mx-auto flex justify-end pt-6">
+    <div className="w-10/12 mx-auto relative pb-6">
+      <div className="flex justify-end pt-6">
         <button
           onClick={handleExportClick}
           className="neumorphic-button bg-gray-200 hover:bg-gray-300 focus:bg-gray-300 active:bg-gray-400 border border-gray-300 rounded-md shadow-lg p-4 transition duration-300"
@@ -34,7 +37,7 @@ const Canvas: React.FC = () => {
           <span>Export as Image</span>
         </button>
       </div>
-      <div className="w-10/12 mx-auto overflow-hidden rounded my-6 h-80vh bg-gray-100 shadow-neumorphic">
+      <div className="overflow-hidden rounded my-6 h-80vh bg-gray-100 shadow-neumorphic">
         <Stage
           width={window.innerWidth}
           height={window.innerHeight}
@@ -62,6 +65,13 @@ const Canvas: React.FC = () => {
             ))}
           </Layer>
         </Stage>
+      </div>
+      <div className="flex items-center opacity-80 bg-gray-200 py-4 px-3 rounded text-slate-900">
+        <InformationCircleIcon className="block mr-2 w-6" />
+        <p>
+          Draw lines around house roofs by clicking and dragging on the
+          image.
+        </p>
       </div>
     </div>
   );
